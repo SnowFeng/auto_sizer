@@ -2,14 +2,13 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-import 'auto_sizer_platform_dispatcher.dart';
-import 'auto_sizer_util.dart';
+import 'auto_sizer.dart';
 
 bool _isInitialized = false;
 
 void runAutoApp(Widget app,
     {required Size designSize, SizerMode mode = SizerMode.portrait}) {
-  AutoSizerUtil.instance.init(designSize, mode: mode);
+  AutoSizer.instance.init(designSize, mode: mode);
   final WidgetsBinding binding = AutoSizerWidgetsBinding.ensureInitialized();
   assert(binding.debugCheckZone('runApp'));
   binding
@@ -29,4 +28,5 @@ class AutoSizerWidgetsBinding extends WidgetsFlutterBinding {
   @override
   AutoSizerPlatformDispatcher get platformDispatcher =>
       AutoSizerPlatformDispatcher.instance;
+
 }

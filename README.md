@@ -9,8 +9,7 @@ runAutoApp(const MyApp(),designSize: 设计图基准尺寸(如：375*667));
 ```
 ### 方式二
 ```dart
-AutoSizerUtil.instance.init(设计图基准尺寸(如：375*667), mode: mode);
-AutoSizerWidgetsBinding.ensureInitialized();
+AutoSizer.instance.init(设计图基准尺寸(如：375*667), mode: mode);
 runApp(const MyApp());
 ```
 ## 注意事项

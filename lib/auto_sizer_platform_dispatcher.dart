@@ -2,6 +2,8 @@ import 'dart:isolate';
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:auto_sizer/auto_sizer.dart';
+
 import 'auto_sizer_window.dart';
 
 class AutoSizerPlatformDispatcher implements PlatformDispatcher{
@@ -21,6 +23,7 @@ class AutoSizerPlatformDispatcher implements PlatformDispatcher{
   final Map<int, AutoSizerDisplay> _autoSizerDisplays = <int, AutoSizerDisplay>{};
 
   void _handleMetricsChanged() {
+    AutoSizer.instance.onMetricsChanged();
     _updateViewsAndDisplays();
     _onMetricsChanged?.call();
   }

@@ -1,8 +1,6 @@
 import 'dart:ui';
 
-import 'package:auto_sizer/auto_sizer_util.dart';
-
-import 'auto_sizer_platform_dispatcher.dart';
+import 'package:auto_sizer/auto_sizer.dart';
 
 class AutoSizerView implements FlutterView{
 
@@ -126,7 +124,7 @@ class AutoSizerDisplay implements Display {
         _display = display;
 
   @override
-  double get devicePixelRatio => AutoSizerUtil.instance.devicePixelRatio;
+  double get devicePixelRatio => AutoSizer.instance.devicePixelRatio;
 
   @override
   int get id => _display.id;
@@ -136,7 +134,10 @@ class AutoSizerDisplay implements Display {
 
 
   @override
-  Size get size => _display.size;
+  Size get size{
+    print('--------------size=${_display.size}---------------');
+    return _display.size;
+  }
 
   @override
   dynamic noSuchMethod(Invocation invocation) {

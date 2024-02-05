@@ -1,6 +1,6 @@
 name: auto_sizer
 description: 根据设计图尺寸自动适配各种像素密度的屏幕
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/SnowFeng/auto_sizer.git
 
 environment:
