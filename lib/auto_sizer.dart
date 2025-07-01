@@ -62,6 +62,11 @@ class AutoSizer {
     _update();
   }
 
+  ///当焦点发生变化时
+  void onViewFocusChange(){
+    _update();
+  }
+
   double get devicePixelRatio => _devicePixelRatio;
 
   Size get designSize => _designSize;

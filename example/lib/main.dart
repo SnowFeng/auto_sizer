@@ -1,12 +1,11 @@
 import 'dart:ui';
 
-import 'package:auto_sizer/auto_sizer_platform_dispatcher.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_sizer/auto_sizer.dart';
 
 bool isAuto = true;
 
-Size designSize = const Size(360,667);
+Size designSize = const Size(560,667);
 
 void main() {
   if(isAuto){

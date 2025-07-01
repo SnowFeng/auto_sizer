@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:auto_sizer/auto_sizer.dart';
+import 'package:flutter/material.dart';
 
 import 'auto_sizer_window.dart';
 
@@ -16,6 +17,7 @@ class AutoSizerPlatformDispatcher implements PlatformDispatcher{
   AutoSizerPlatformDispatcher._(){
     _updateViewsAndDisplays();
     _platformDispatcher.onMetricsChanged = _handleMetricsChanged;
+    _platformDispatcher.onViewFocusChange = _handleViewFocusChanged;
   }
 
   final Map<int, AutoSizerView> _autoSizerViews = <int, AutoSizerView>{};
@@ -26,6 +28,12 @@ class AutoSizerPlatformDispatcher implements PlatformDispatcher{
     AutoSizer.instance.onMetricsChanged();
     _updateViewsAndDisplays();
     _onMetricsChanged?.call();
+  }
+
+  void _handleViewFocusChanged(ViewFocusEvent event) {
+    AutoSizer.instance.onViewFocusChange();
+    _updateViewsAndDisplays();
+    _onViewFocusChange?.call(event);
   }
 
   @override
@@ -97,12 +105,15 @@ class AutoSizerPlatformDispatcher implements PlatformDispatcher{
   set onPlatformConfigurationChanged(VoidCallback? onPlatformConfigurationChanged) {
     _platformDispatcher.onPlatformConfigurationChanged = onPlatformConfigurationChanged;
   }
-
+  @Deprecated(
+    'Migrate to ChannelBuffers.setListener instead. '
+        'This feature was deprecated after v3.11.0-20.0.pre.',
+  )
   @override
   PlatformMessageCallback? get onPlatformMessage => _platformDispatcher.onPlatformMessage;
   @Deprecated(
-      'Instead of setting this callback, use ServicesBinding.instance.defaultBinaryMessenger.setMessageHandler. '
-          'This feature was deprecated after v2.1.0-10.0.pre.'
+    'Migrate to ChannelBuffers.setListener instead. '
+        'This feature was deprecated after v3.11.0-20.0.pre.',
   )
   @override
   set onPlatformMessage(PlatformMessageCallback? callback) {
@@ -245,15 +256,17 @@ class AutoSizerPlatformDispatcher implements PlatformDispatcher{
   String? get systemFontFamily => _platformDispatcher.systemFontFamily;
 
   @override
-  double get textScaleFactor => _textScaleFactorValue??_platformDispatcher.textScaleFactor;
+  double get textScaleFactor => _platformDispatcher.textScaleFactor;
 
-  double? _textScaleFactorValue;
-  
-  set textScaleFactorValue(double textScaleFactorValue) {
-    _textScaleFactorValue = textScaleFactorValue;
-    onTextScaleFactorChanged?.call();
-  }
 
+  @Deprecated('''
+    In a multi-view world, the platform dispatcher can no longer provide apis
+    to update semantics since each view will host its own semantics tree.
+
+    Semantics updates must be passed to an individual [FlutterView]. To update
+    semantics, use PlatformDispatcher.instance.views to get a [FlutterView] and
+    call `updateSemantics`.
+  ''')
   @override
   void updateSemantics(SemanticsUpdate update) {
     _platformDispatcher.updateSemantics(update);
@@ -310,5 +323,36 @@ class AutoSizerPlatformDispatcher implements PlatformDispatcher{
     extraViewKeys.forEach(_autoSizerViews.remove);
   }
 
+
+  @override
+  ViewFocusChangeCallback? get onViewFocusChange => _platformDispatcher.onViewFocusChange;
+  ViewFocusChangeCallback? _onViewFocusChange;
+  @override
+  set onViewFocusChange(ViewFocusChangeCallback? callback) {
+    _onViewFocusChange = callback;
+  }
+
+  @override
+  void requestViewFocusChange({
+    required int viewId,
+    required ViewFocusState state,
+    required ViewFocusDirection direction,
+  }) {
+    _platformDispatcher.requestViewFocusChange(viewId: viewId, state: state, direction: direction);
+  }
+
+  @override
+  double scaleFontSize(double unscaledFontSize) => _platformDispatcher.scaleFontSize(unscaledFontSize);
+
+  @override
+  void scheduleWarmUpFrame({required VoidCallback beginFrame, required VoidCallback drawFrame}) {
+    _platformDispatcher.scheduleWarmUpFrame(beginFrame: beginFrame, drawFrame: drawFrame);
+  }
+
+  @override
+  bool get supportsShowingSystemContextMenu => _platformDispatcher.supportsShowingSystemContextMenu;
+
+  @override
+  int? get engineId => _platformDispatcher.engineId;
 
 }

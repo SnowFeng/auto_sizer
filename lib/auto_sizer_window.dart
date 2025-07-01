@@ -40,15 +40,6 @@ class AutoSizerView implements FlutterView{
   @override
   AutoSizerViewPadding get padding => AutoSizerViewPadding._wrap(_view.padding);
 
-  @override
-  Rect get physicalGeometry{
-    Rect value = _physicalGeometry ?? _view.physicalGeometry;
-    if (_physicalSize != null) {
-      value = value.topLeft & _physicalSize!;
-    }
-    return value;
-  }
-
   Rect? _physicalGeometry;
   set physicalGeometry(Rect value) {
     _physicalGeometry = value;
@@ -65,12 +56,14 @@ class AutoSizerView implements FlutterView{
     platformDispatcher.onMetricsChanged?.call();
   }
 
+  ViewConstraints get physicalConstraints => ViewConstraints.tight(physicalSize);
+
   @override
   AutoSizerPlatformDispatcher get platformDispatcher => _platformDispatcher;
 
   @override
-  void render(Scene scene) {
-    _view.render(scene);
+  void render(Scene scene, {Size? size}) {
+    _view.render(scene, size: size);
   }
 
   @override
