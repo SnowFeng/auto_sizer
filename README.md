@@ -3,14 +3,10 @@
 自动适配各种像素密度的屏幕，只需要设置好设计图基准尺寸，编写代码时直接使用设计尺寸即可。
 
 ## 使用
-### 方式一
 ```dart
+AutoSizerWidgetsBinding.ensureInitialized();//调用前不能使用WidgetsFlutterBinding.ensureInitialized()等相关操作
+//其他配置
 runAutoApp(const MyApp(),designSize: 设计图基准尺寸(如：375*667));
-```
-### 方式二
-```dart
-AutoSizer.instance.init(设计图基准尺寸(如：375*667), mode: mode);
-runApp(const MyApp());
 ```
 ## 注意事项
 1、初始化前不能使用WidgetsFlutterBinding.ensureInitialized()等相关操作，因为WidgetsBinding是单例的，只能初始化一次
